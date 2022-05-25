@@ -22,6 +22,7 @@ const container = document.querySelector(".card-container");
 const searchBar = document.querySelector("#search");
 const searchButton = document.querySelector("#search-button");
 const filterNumberDropDown = document.querySelector("#number-of-results");
+const filterTypeDropDown = document.querySelector("#type-filter");
 
 /* -------------------------------------------------------------------------- */
 /*                                  Functions                                 */
@@ -101,6 +102,24 @@ const limitNumberOfResults = () => {
   }
 };
 
+const filterByType = () => {
+    const filterType = filterTypeDropDown.value;
+  
+    if (filterType === "all") {
+      currentPokemons.forEach((currentPokemon) => {
+        document.getElementById(`${currentPokemon.id}`).style.display = "flex";
+      });
+    } else {
+        currentPokemons.forEach(currentPokemon => {
+            if (currentPokemon.types.includes(filterType)) {
+                document.getElementById(`${currentPokemon.id}`).style.display = "flex"
+            } else {
+                document.getElementById(`${currentPokemon.id}`).style.display = "none"
+            }
+        })
+    }
+  };
+
 /* -------------------------------------------------------------------------- */
 /*                               Event Listeners                              */
 /* -------------------------------------------------------------------------- */
@@ -125,3 +144,5 @@ searchButton.addEventListener(
 );
 
 filterNumberDropDown.addEventListener("click", limitNumberOfResults);
+
+filterTypeDropDown.addEventListener("click", filterByType);
