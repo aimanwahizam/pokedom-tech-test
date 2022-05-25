@@ -75,8 +75,10 @@ const filterPokemonBySearch = () => {
   });
 };
 
-const storeCurrentPokemon = (currentArray, pokemonArray) => {
-  pokemonArray.forEach((pokemon) => {
+const storeCurrentPokemon = (currentArray) => {
+  const pokemons = [...pokemonArray];
+
+  pokemons.forEach((pokemon) => {
     if (document.getElementById(`${pokemon.id}`).style.display != "none") {
       currentArray.push(pokemon);
     }
@@ -94,8 +96,8 @@ const limitNumberOfResults = () => {
     const notHidePokemons = currentPokemons.slice(0, filterNumber);
     const hidePokemons = currentPokemons.slice(filterNumber);
     notHidePokemons.forEach((currentPokemon) => {
-        document.getElementById(`${currentPokemon.id}`).style.display = "flex";
-      });
+      document.getElementById(`${currentPokemon.id}`).style.display = "flex";
+    });
     hidePokemons.forEach((hiddenPokemon) => {
       document.getElementById(`${hiddenPokemon.id}`).style.display = "none";
     });
@@ -103,22 +105,23 @@ const limitNumberOfResults = () => {
 };
 
 const filterByType = () => {
-    const filterType = filterTypeDropDown.value;
-  
-    if (filterType === "all") {
-      currentPokemons.forEach((currentPokemon) => {
+  const filterType = filterTypeDropDown.value;
+  const searchResult = [...currentPokemons];
+
+  if (filterType === "all") {
+    searchResult.forEach((currentPokemon) => {
+      document.getElementById(`${currentPokemon.id}`).style.display = "flex";
+    });
+  } else {
+    searchResult.forEach((currentPokemon) => {
+      if (currentPokemon.types.includes(filterType)) {
         document.getElementById(`${currentPokemon.id}`).style.display = "flex";
-      });
-    } else {
-        currentPokemons.forEach(currentPokemon => {
-            if (currentPokemon.types.includes(filterType)) {
-                document.getElementById(`${currentPokemon.id}`).style.display = "flex"
-            } else {
-                document.getElementById(`${currentPokemon.id}`).style.display = "none"
-            }
-        })
-    }
-  };
+      } else {
+        document.getElementById(`${currentPokemon.id}`).style.display = "none";
+      }
+    });
+  }
+};
 
 /* -------------------------------------------------------------------------- */
 /*                               Event Listeners                              */
@@ -136,13 +139,13 @@ body.addEventListener(
 
 // body.addEventListener("load", storeCurrentPokemon)
 
-searchButton.addEventListener("click", filterPokemonBySearch);
+searchBar.addEventListener("input", filterPokemonBySearch);
 
 searchButton.addEventListener(
   "click",
-  storeCurrentPokemon(currentPokemons, pokemonArray)
+  storeCurrentPokemon(currentPokemons)
 );
 
-filterNumberDropDown.addEventListener("click", limitNumberOfResults);
-
 filterTypeDropDown.addEventListener("click", filterByType);
+
+filterNumberDropDown.addEventListener("click", limitNumberOfResults);
