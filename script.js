@@ -83,7 +83,6 @@ const storeCurrentPokemon = (currentArray, pokemonArray) => {
 };
 
 const limitNumberOfResults = () => {
-  const pokemons = [...pokemonArray];
   const filterNumber = filterNumberDropDown.value;
 
   if (filterNumber === "all") {
@@ -91,11 +90,14 @@ const limitNumberOfResults = () => {
       document.getElementById(`${currentPokemon.id}`).style.display = "flex";
     });
   } else {
+    const notHidePokemons = currentPokemons.slice(0, filterNumber);
     const hidePokemons = currentPokemons.slice(filterNumber);
-    hidePokemons.forEach((hiddenpokemon) => {
-      document.getElementById(`${hiddenpokemon.id}`).style.display = "none";
+    notHidePokemons.forEach((currentPokemon) => {
+        document.getElementById(`${currentPokemon.id}`).style.display = "flex";
+      });
+    hidePokemons.forEach((hiddenPokemon) => {
+      document.getElementById(`${hiddenPokemon.id}`).style.display = "none";
     });
-    console.log(hidePokemons.length);
   }
 };
 
