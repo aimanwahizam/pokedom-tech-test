@@ -11,7 +11,7 @@ const pokemonName = pokemonArray.map(
 const pokemonID = pokemonArray.map((pokemon) => pokemon.id);
 const pokemonTypes = pokemonArray.map((pokemon) => pokemon.types);
 const pokemonInfo = [];
-let userSearch = [];
+const currentPokemons = [];
 
 /* -------------------------------------------------------------------------- */
 /*                                HTML Elements                               */
@@ -21,6 +21,7 @@ const body = document.querySelector("body");
 const container = document.querySelector(".card-container");
 const searchBar = document.querySelector("#search");
 const searchButton = document.querySelector("#search-button");
+const filterNumberDropDown = document.querySelector("#number-of-results");
 
 /* -------------------------------------------------------------------------- */
 /*                                  Functions                                 */
@@ -68,9 +69,34 @@ const filterPokemonBySearch = () => {
         document.getElementById(`${pokemon.id}`).style.display = "none";
       }
     } else {
-        document.getElementById(`${pokemon.id}`).style.display = "flex";
+      document.getElementById(`${pokemon.id}`).style.display = "flex";
     }
   });
+};
+
+const storeCurrentPokemon = (currentArray, pokemonArray) => {
+  pokemonArray.forEach((pokemon) => {
+    if (document.getElementById(`${pokemon.id}`).style.display != "none") {
+      currentArray.push(pokemon);
+    }
+  });
+};
+
+const limitNumberOfResults = () => {
+  const pokemons = [...pokemonArray];
+  const filterNumber = filterNumberDropDown.value;
+
+  if (filterNumber === "all") {
+    currentPokemons.forEach((currentPokemon) => {
+      document.getElementById(`${currentPokemon.id}`).style.display = "flex";
+    });
+  } else {
+    const hidePokemons = currentPokemons.slice(filterNumber);
+    hidePokemons.forEach((hiddenpokemon) => {
+      document.getElementById(`${hiddenpokemon.id}`).style.display = "none";
+    });
+    console.log(hidePokemons.length);
+  }
 };
 
 /* -------------------------------------------------------------------------- */
@@ -87,4 +113,13 @@ body.addEventListener(
   addPokemonCards(pokemonImage, pokemonName, pokemonInfo, pokemonID)
 );
 
+// body.addEventListener("load", storeCurrentPokemon)
+
 searchButton.addEventListener("click", filterPokemonBySearch);
+
+searchButton.addEventListener(
+  "click",
+  storeCurrentPokemon(currentPokemons, pokemonArray)
+);
+
+filterNumberDropDown.addEventListener("click", limitNumberOfResults);
