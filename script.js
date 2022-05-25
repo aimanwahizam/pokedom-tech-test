@@ -137,8 +137,6 @@ body.addEventListener(
   addPokemonCards(pokemonImage, pokemonName, pokemonInfo, pokemonID)
 );
 
-// body.addEventListener("load", storeCurrentPokemon)
-
 searchBar.addEventListener("input", filterPokemonBySearch);
 
 searchButton.addEventListener(
